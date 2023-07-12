@@ -1,69 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 
 <head>
     <meta charset="utf-8">
-    <title>Load data from an external GeoJSON file</title>
+    <title>Richard peet List</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <!-- Including the Mapbox GL CSS file -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+
+    <!-- Including the Mapbox GL JS file -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+
     <style>
+        /* CSS styles for the layout and components */
         body {
             margin: 0;
             padding: 0;
         }
-
+    
         #container {
             display: flex;
             height: 100vh;
-            flex-direction: row;
+            flex-direction: row-reverse; /* Change flex-direction to row-reverse */
             align-items: stretch;
         }
-
-        #table {
+    
+        #side-panel {
             flex-basis: 500px;
             overflow-y: scroll;
         }
-
+    
         #map {
             flex-grow: 1;
         }
-
+    
         button {
             margin-bottom: 10px;
         }
+    
         table {
             border-collapse: collapse;
             border-spacing: 0;
             width: 100%;
             border: 1px solid #ddd;
         }
-
+    
         th,
         td {
             text-align: left;
             padding: 16px;
         }
-
+    
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-    </style>
+    
+        /* Disaster layout for small screens */
+        @media (max-width: 1024px) {
+            #container {
+                flex-direction: column-reverse;
+            }
+    
+            #side-panel {
+                display: none;
+            }
+    
+            #map {
+                height: calc(100vh - 50px); /* Adjust height for map to fit */
+            }
+    
+            table {
+                width: 100%;
+                border: none;
+            }
+    
+            th,
+            td {
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 8px;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+    
+            tr:nth-child(even) {
+                background-color: white;
+            }
+        }
+    </style>    
 </head>
 
 <body>
     <main id="container">
-        <div id="table">
+        <div id="side-panel">
 
-            <h2>Earthquake List</h2>
-            <button onclick="sortTable()">Sort by Magnitude</button>
-            
+            <h2>Richard Peet's Life</h2>
+            <button>Sort by Year</button>
 
             <table>
                 <tr>
-                    <th>id</th>
-                    <th>magnitude</th>
-                    <th>timestamp</th>
+                    <th>Year</th>
+                    <th>Event</th>
+                    <th>Id</th>
                 </tr>
             </table>
 
@@ -72,72 +114,53 @@
 
     </main>
     <script>
+        // Define the Mapbox access token
         mapboxgl.accessToken =
             'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
-        const map = new mapboxgl.Map({
+
+        // Create the map object
+        let map = new mapboxgl.Map({
             container: 'map', // container ID
-            style: 'mapbox://styles/mapbox/satellite-v9', // style URL
-            zoom: 5.5, // starting zoom
-            center: [138.043, 38] // starting center
+            style: 'mapbox://styles/mapbox/dark-v10', // style URL
+            zoom: 2, // starting zoom
+            center: [0, 0] // starting center
         });
 
 
         async function geojsonFetch() {
 
+            let response, Richard_peet, polygons, table;
+            response = await fetch('assets/Richard_peet.geojson');
+            Richard_peet = await response.json();
+            response = await fetch('assets/polygons.json');
+            polygons = await response.json();
 
-            let response = await fetch('assets/earthquakes.geojson');
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            let earthquakes = await response.json();
-
-
-            response = await fetch('assets/japan.json');
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            let japan = await response.json();
-
-
-            var table = document.getElementsByTagName("table");
-            for (let i = 0; i < earthquakes.features.length; i++) {
-                // console.log(earthquakes.features[i].properties.id);
-
-                var lng = await earthquakes.features[i].geometry.coordinates[0];
-                var lat = await earthquakes.features[i].geometry.coordinates[1];
-
+            table = document.getElementsByTagName("table")[0];
+            let row, cell1, cell2, cell3;
+            for (let i = 0; i < Richard_peet.features.length; i++) {
                 // Create an empty <tr> element and add it to the 1st position of the table:
-                var row = table[0].insertRow(-1);
-
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                cell1.innerHTML = await earthquakes.features[i].properties.id;
-                cell2.innerHTML = await earthquakes.features[i].properties.mag;
-                cell3.innerHTML = await new Date(earthquakes.features[i].properties.time).toLocaleDateString("en-US");
-
+                row = table.insertRow(-1);
+                cell1 = row.insertCell(0);
+                cell2 = row.insertCell(1);
+                cell3 = row.insertCell(2);
+                cell1.innerHTML = Richard_peet.features[i].properties.Year;
+                cell2.innerHTML = Richard_peet.features[i].properties.Event;
+                cell3.innerHTML = Richard_peet.features[i].properties.Id;
             }
 
 
+            //load data to the map as new layers and table on the side.
+            map.on('load', function loadingData() {
 
-
-            map.on('load', () => {
-
-
-
-                map.addSource('earthquakes', {
+                map.addSource('Richard_peet', {
                     type: 'geojson',
-                    data: earthquakes
+                    data: Richard_peet
                 });
 
                 map.addLayer({
-                    'id': 'earthquakes-layer',
+                    'id': 'Richard_peet-layer',
                     'type': 'circle',
-                    'source': 'earthquakes',
+                    'source': 'Richard_peet',
                     'paint': {
                         'circle-radius': 8,
                         'circle-stroke-width': 2,
@@ -147,42 +170,34 @@
                 });
 
 
-                map.addSource('japan', {
+                map.addSource('polygons', {
                     type: 'geojson',
-                    data: japan
+                    data: polygons
                 });
 
                 map.addLayer({
-                    'id': 'japan-layer',
+                    'id': 'polygons-layer',
                     'type': 'fill',
-                    'source': 'japan',
+                    'source': 'polygons',
                     'paint': {
                         'fill-color': '#0080ff', // blue color fill
                         'fill-opacity': 0.5
                     }
                 });
 
-
-
-
-
-
             });
-
-
-
 
         }
 
-        geojsonFetch()
-            .catch(e => {
-                console.log('There has been a problem with your fetch operation: ' + e.message);
-            });
+        geojsonFetch();
 
+        let btn = document.getElementsByTagName("button")[0];
 
+        btn.addEventListener('click', sortTable);
 
-        function sortTable() {
-            var table, rows, switching, i, x, y, shouldSwitch;
+        // define the function to sort table
+        function sortTable(e) {
+            let table, rows, switching, i, x, y, shouldSwitch;
             table = document.getElementsByTagName("table")[0];
             switching = true;
             /*Make a loop that will continue until
