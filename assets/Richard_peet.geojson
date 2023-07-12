@@ -1,0 +1,125 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "Year": 1942,
+          "Event": "Birth of Richard Peet",
+          "Id": 1
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            53.6475,
+            -3.005278
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Year": 1965,
+          "Event": "Completed Bachelor's degree in Geography",
+          "Id": 2
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -1.617439,
+            54.976198
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Year": 1971,
+          "Event": "Earned Ph.D. in Geography",
+          "Id": 3
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -122.419415,
+            37.774929
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Year": 1975,
+          "Event": "Joined Clark University as a faculty member",
+          "Id": 4
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -71.819298,
+            42.254752
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Year": 1984,
+          "Event": "Published 'Unholy Trinity: The IMF, World Bank, and WTO'",
+          "Id": 5
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -118.243685,
+            34.052235
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Year": 1990,
+          "Event": "Visited Brazil",
+          "Id": 6
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -47.882801,
+            -15.794229
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Year": 2001,
+          "Event": "Published 'Geography of Power: Making Global Economic Policy'",
+          "Id": 7
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -1.617439,
+            54.976198
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "Year": 2012,
+          "Event": "Retired from teaching",
+          "Id": 8
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -122.330062,
+            47.609713
+          ]
+        }
+      }
+    ]
+  }
